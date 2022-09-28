@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 5eba60f5573924cf4971eed52645f4f9
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - buton: {instanceID: 0}
+  - buy: {instanceID: 0}
+  - altin: {instanceID: 0}
+  - impact: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
