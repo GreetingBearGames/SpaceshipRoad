@@ -8,27 +8,54 @@ public class Planet_to_Game : MonoBehaviour
     [SerializeField] private List<GameObject> obstacles;
     [SerializeField] AudioClip[] muzikler = new AudioClip[4];
 
-    void Awake() 
-    {        
-        for(int i = 0; i < 4; i++)
-        {
-            GameObject deaktiveGezegen = gameObject.transform.GetChild(i).gameObject;
-            deaktiveGezegen.SetActive(false);
 
-            if(PlayerPrefs.GetInt("isPlanetUsed" + i) == 1)
+
+    [Header("0:Dunya / 1:Mars / 2:Venus / 3:Uzay")]
+    [SerializeField] private int selectPlanet;  //0 ise dünya, 1 ise mars, 2 ise venus, 3 ise uzay
+
+
+    void Awake()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            PlayerPrefs.SetInt("isPlanetUsed" + i, 0);
+            if (i == selectPlanet)
             {
-                GameObject aktiveGezegen = gameObject.transform.GetChild(i).gameObject;
+                PlayerPrefs.SetInt("isPlanetUsed" + i, 1);
+
+                aktiveGezegen = gameObject.transform.GetChild(i).gameObject;
                 aktiveGezegen.SetActive(true);
-                //GezegenObstacleSecici();
-                
-                if(PlayerPrefs.GetInt("MusicOption") == 1)
+                if (PlayerPrefs.GetInt("MusicOption") == 1)
                 {
                     this.GetComponent<AudioSource>().clip = muzikler[i];
                     this.GetComponent<AudioSource>().Play();
                 }
                 break;
             }
-        }  
+
+
+
+            /*
+            GameObject deaktiveGezegen = gameObject.transform.GetChild(i).gameObject;
+            deaktiveGezegen.SetActive(false);
+
+            if (PlayerPrefs.GetInt("isPlanetUsed" + i) == 1)
+            {
+                GameObject aktiveGezegen = gameObject.transform.GetChild(i).gameObject;
+                aktiveGezegen.SetActive(true);
+                //GezegenObstacleSecici();
+
+                if (PlayerPrefs.GetInt("MusicOption") == 1)
+                {
+                    this.GetComponent<AudioSource>().clip = muzikler[i];
+                    this.GetComponent<AudioSource>().Play();
+                }
+
+            }
+            */
+        }
+
+
     }
 
     /*
