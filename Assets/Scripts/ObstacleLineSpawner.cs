@@ -10,6 +10,7 @@ public class ObstacleLineSpawner : MonoBehaviour
     [Range(0, 1.0f)] public float coinSpawnRate;
     public static ObstacleLineSpawner instance;
     private int lineIndex;
+    public float ObstacleSpeedStart;
 
 
     void Start()
@@ -27,6 +28,7 @@ public class ObstacleLineSpawner : MonoBehaviour
         line.transform.parent = transform;
         // Add ObstaclesLine script to the gameobject.
         line.AddComponent<ObstacleRow>();
+        line.GetComponent<ObstacleRow>().ilkHiz = ObstacleSpeedStart;
 
         if (lineIndex > 0)
         {

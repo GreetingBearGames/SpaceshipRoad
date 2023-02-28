@@ -18048,6 +18048,7 @@ MonoBehaviour:
   newspawn_deltaheight: 12
   randomizeObstaclesOffest: 9
   coinSpawnRate: 0.3
+  ObstacleSpeedStart: 5
 --- !u!1001 &1365151314
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -39433,7 +39434,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1958861341}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}

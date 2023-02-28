@@ -13,13 +13,13 @@ public class GameOver : MonoBehaviour
     void Start()
     {
         instance = this;
-        crashedWithStone = false;   
+        crashedWithStone = false;
     }
 
-    
+
     public void Crashed()
     {
-        if(!crashedWithStone)
+        if (!crashedWithStone)
         {
             crashedWithStone = true;
             ObstacleRow.speed = 0;
@@ -29,7 +29,7 @@ public class GameOver : MonoBehaviour
             patlamaParticle.SetActive(true);
             GameOverWindow.SetActive(true);
             pauseButtton.SetActive(false);
-            
+
             (aktifOlanGemi.transform.GetChild(0).gameObject).SetActive(false); //aktif geminin flamelerini gizleme
             StartCoroutine("FadeOut");
         }
@@ -37,13 +37,13 @@ public class GameOver : MonoBehaviour
 
     IEnumerator FadeOut()
     {
-        for (float f = 1f; f>= -0.05f; f -= 0.2f)
+        for (float f = 1f; f >= -0.05f; f -= 0.2f)
         {
             Color objectColor = aktifOlanGemi.GetComponent<SpriteRenderer>().color;
             objectColor.a = f;
             aktifOlanGemi.GetComponent<SpriteRenderer>().color = objectColor;
             yield return new WaitForSeconds(0.15f);
         }
-    }  
+    }
 }
 
