@@ -12,6 +12,7 @@ public class Player_Hareket : MonoBehaviour
     private float moveAmount = 0f;
     private float moveSpeedTilt = 1900f;
     public static bool kontrolYontemi;    //kontrolYontemi = 1 ise tilt, 0 ise touch
+    private bool isFinished = false;
     private float extraMoveforSmooth = 1f;
 
 
@@ -31,7 +32,7 @@ public class Player_Hareket : MonoBehaviour
 
 
 
-    /*
+    /*      ESKİ KONTROL YÖNTEMİ
     void FixedUpdate()
     {
         if (kontrolYontemi)
@@ -48,8 +49,11 @@ public class Player_Hareket : MonoBehaviour
 
     void Update()
     {
-        TouchInput();
-        MovewithSlide();
+        if (!isFinished)
+        {
+            TouchInput();
+            MovewithSlide();
+        }
     }
 
     public void MovetoLeftDown() { leftMove = true; }
@@ -147,4 +151,41 @@ public class Player_Hareket : MonoBehaviour
         transform.position = new Vector3(transform.position.x + newPositionDifference, transform.position.y, transform.position.z);
     }
 
+
+    public void FinishLinePlayerControl()
+    {
+        isFinished = true;
+
+        StartCoroutine("FinishSpeedIncrease");
+
+    }
+
+    IEnumerator FinishSpeedIncrease()
+    {
+        float acceleration = 0.4f;
+        float maxSpeed = 60.0f;
+        float currentSpeed = 0.0f;
+        GameObject aktifGemi = Ship_to_Game.aktiveGemi;
+
+        //egzos trailrendererlarını aktif hale getirme
+        TrailRenderer[] trails = aktifGemi.GetComponentsInChildren<TrailRenderer>();
+        foreach (TrailRenderer trail in trails)
+        {
+            trail.enabled = true;
+        }
+
+
+        while (currentSpeed < maxSpeed)
+        {
+            currentSpeed += acceleration;
+            aktifGemi.GetComponent<Rigidbody2D>().velocity = Vector2.up * currentSpeed;
+            yield return new WaitForEndOfFrame();
+
+            if (aktifGemi.GetComponent<SpriteRenderer>().isVisible == false)
+            {
+                //Gemi ekrandan çıktı
+                break;
+            }
+        }
+    }
 }

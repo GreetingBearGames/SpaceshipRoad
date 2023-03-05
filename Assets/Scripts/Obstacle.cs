@@ -9,11 +9,11 @@ public class Obstacle : MonoBehaviour
     private bool crashed;
     private GameObject tasPatlamaParticle;
 
-    
+
     void Start()
     {
         rotationspeed = Random.Range(1f, 100f);
-        rotationDirection = Random.Range(0,2)*2-1;
+        rotationDirection = Random.Range(0, 2) * 2 - 1;
         tasPatlamaParticle = gameObject.transform.GetChild(0).gameObject;
         crashed = false;
     }
@@ -24,7 +24,7 @@ public class Obstacle : MonoBehaviour
         transform.Rotate(0, 0, rotationspeed * rotationDirection * Time.deltaTime, Space.Self);
     }
 
-    
+
     void OnTriggerEnter2D(Collider2D col)
     {
         // Check if did not crashed already.
@@ -32,7 +32,7 @@ public class Obstacle : MonoBehaviour
         {
             if (col.tag == "Player")
             {
-                SoundFX_Control.instance.PlayImpactSound();
+                //SoundFX_Control.instance.PlayImpactSound();
                 GameOver.instance.Crashed();
                 // Set crashed value to true so that this function would not be called again.
                 crashed = true;
@@ -44,7 +44,7 @@ public class Obstacle : MonoBehaviour
 
     IEnumerator FadeOut()
     {
-        for (float f = 1f; f>= -0.05f; f -= 0.2f)
+        for (float f = 1f; f >= -0.05f; f -= 0.2f)
         {
             Color objectColor = GetComponent<SpriteRenderer>().color;
             objectColor.a = f;
