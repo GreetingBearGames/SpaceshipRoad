@@ -32,4 +32,9 @@ public class Bg_Kayma : MonoBehaviour
     {
         isScrolling = true;
     }
+
+    public void StopScrolling()
+    {
+        isScrolling = false;
+    }
 }

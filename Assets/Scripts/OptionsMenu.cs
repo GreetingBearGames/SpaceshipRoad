@@ -7,20 +7,20 @@ using UnityEngine.SceneManagement;
 
 public class OptionsMenu : MonoBehaviour
 {
-    [SerializeField] GameObject menuBackground, optionsMenu, optionsContent, resetMenu, musicOnButton, musicOffButton, soundOnButton, soundOffButton;
+    [SerializeField] GameObject menuBackground, optionsMenu, optionsContent, musicOnButton, musicOffButton, soundOnButton, soundOffButton;
     [SerializeField] GameObject sensorModeButton, touchModeButton;
-    [SerializeField] GameObject shopMenuButton;
+    [SerializeField] GameObject shopMenu;
     [SerializeField] GameObject MusicObject;
 
 
-    void Start() 
+    void Start()
     {
-        if(PlayerPrefs.GetInt("SoundOption") == 1)  {SoundOptionOn();}
-        else {SoundOptionOff();}
-        if(PlayerPrefs.GetInt("MusicOption") == 1)  {MusicOptionOn();}
-        else {MusicOptionOff();}
-        if(PlayerPrefs.GetInt("ControlTypeOption") == 1)  {SensorModeOptionOn();}
-        else {TouchModeOptionOn();}
+        if (PlayerPrefs.GetInt("SoundOption") == 1) { SoundOptionOn(false); }
+        else { SoundOptionOff(); }
+        if (PlayerPrefs.GetInt("MusicOption") == 1) { MusicOptionOn(false); }
+        else { MusicOptionOff(false); }
+        if (PlayerPrefs.GetInt("ControlTypeOption") == 1) { SensorModeOptionOn(false); }
+        else { TouchModeOptionOn(false); }
     }
 
 
@@ -29,9 +29,10 @@ public class OptionsMenu : MonoBehaviour
         menuBackground.SetActive(true);
         optionsContent.SetActive(true);
         optionsMenu.SetActive(true);
+        GameManager.Instance.IsGameStarted = false;
         //StartCoroutine("OptionsFadeIn");
-        shopMenuButton.SetActive(false);
-        resetMenu.SetActive(false);
+        shopMenu.SetActive(false);
+        //resetMenu.SetActive(false);
         SoundFX_Control.instance.PlayButtonSound();
     }
 
@@ -39,99 +40,100 @@ public class OptionsMenu : MonoBehaviour
     {
         menuBackground.SetActive(false);
         optionsMenu.SetActive(false);
+        GameManager.Instance.IsGameStarted = true;
         //StartCoroutine("OptionsFadeOut");
-        shopMenuButton.SetActive(true);
+        shopMenu.SetActive(true);
         SoundFX_Control.instance.PlayButtonSound();
     }
 
 
-    public void SoundOptionOn()
+    public void SoundOptionOn(bool sesCalsinmi)
     {
         PlayerPrefs.SetInt("SoundOption", 1);
 
         //musicOnButton.GetComponent<Button>().interactable = true;
-        
+
         Color objectColor1 = soundOnButton.GetComponent<Image>().color;
-        objectColor1.a = 1; 
+        objectColor1.a = 1;
         Color objectColor2 = soundOffButton.GetComponent<Image>().color;
-        objectColor2.a = 0.1f; 
+        objectColor2.a = 0.1f;
         soundOnButton.GetComponent<Image>().color = objectColor1;
         soundOffButton.GetComponent<Image>().color = objectColor2;
-        
+
         //AudioListener.volume = 1f;
         SoundFX_Control.instance.isSoundOn = true;
-        SoundFX_Control.instance.PlayButtonSound();
+        if (sesCalsinmi) SoundFX_Control.instance.PlayButtonSound();
     }
 
     public void SoundOptionOff()
     {
         PlayerPrefs.SetInt("SoundOption", 0);
-        
+
         //MusicOptionOff();
         //musicOnButton.GetComponent<Button>().interactable = false;
 
         Color objectColor1 = soundOffButton.GetComponent<Image>().color;
-        objectColor1.a = 1; 
+        objectColor1.a = 1;
         Color objectColor2 = soundOnButton.GetComponent<Image>().color;
-        objectColor2.a = 0.1f; 
+        objectColor2.a = 0.1f;
         soundOffButton.GetComponent<Image>().color = objectColor1;
         soundOnButton.GetComponent<Image>().color = objectColor2;
-        
+
         //AudioListener.volume = 0f;
         SoundFX_Control.instance.isSoundOn = false;
     }
 
 
-    public void MusicOptionOn()
+    public void MusicOptionOn(bool sesCalsinmi)
     {
         PlayerPrefs.SetInt("MusicOption", 1);
-        
+
         Color objectColor1 = musicOnButton.GetComponent<Image>().color;
-        objectColor1.a = 1; 
+        objectColor1.a = 1;
         Color objectColor2 = musicOffButton.GetComponent<Image>().color;
-        objectColor2.a = 0.1f; 
+        objectColor2.a = 0.1f;
         musicOnButton.GetComponent<Image>().color = objectColor1;
         musicOffButton.GetComponent<Image>().color = objectColor2;
 
         MusicObject.GetComponent<AudioSource>().Play();
-        SoundFX_Control.instance.PlayButtonSound();
+        if (sesCalsinmi) SoundFX_Control.instance.PlayButtonSound();
     }
 
-    public void MusicOptionOff()
+    public void MusicOptionOff(bool sesCalsinmi)
     {
         PlayerPrefs.SetInt("MusicOption", 0);
-        
+
         Color objectColor1 = musicOffButton.GetComponent<Image>().color;
-        objectColor1.a = 1; 
+        objectColor1.a = 1;
         Color objectColor2 = musicOnButton.GetComponent<Image>().color;
-        objectColor2.a = 0.1f; 
+        objectColor2.a = 0.1f;
         musicOffButton.GetComponent<Image>().color = objectColor1;
         musicOnButton.GetComponent<Image>().color = objectColor2;
 
         MusicObject.GetComponent<AudioSource>().Stop();
-        SoundFX_Control.instance.PlayButtonSound();
+        if (sesCalsinmi) SoundFX_Control.instance.PlayButtonSound();
     }
 
-    public void SensorModeOptionOn()
+    public void SensorModeOptionOn(bool sesCalsinmi)
     {
         PlayerPrefs.SetInt("ControlTypeOption", 1);
-        
+
         Color objectColor1 = sensorModeButton.GetComponent<Image>().color;
-        objectColor1.a = 1; 
+        objectColor1.a = 1;
         Color objectColor2 = touchModeButton.GetComponent<Image>().color;
-        objectColor2.a = 0.15f; 
+        objectColor2.a = 0.15f;
         sensorModeButton.GetComponent<Image>().color = objectColor1;
         touchModeButton.GetComponent<Image>().color = objectColor2;
 
         Player_Hareket.kontrolYontemi = true;
-        SoundFX_Control.instance.PlayButtonSound();
+        if (sesCalsinmi) SoundFX_Control.instance.PlayButtonSound();
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
     }
 
-    public void TouchModeOptionOn()
+    public void TouchModeOptionOn(bool sesCalsinmi)
     {
         PlayerPrefs.SetInt("ControlTypeOption", 0);
-        
+
         Color objectColor1 = touchModeButton.GetComponent<Image>().color;
         objectColor1.a = 1f;
         Color objectColor2 = sensorModeButton.GetComponent<Image>().color;
@@ -139,16 +141,16 @@ public class OptionsMenu : MonoBehaviour
         touchModeButton.GetComponent<Image>().color = objectColor1;
         sensorModeButton.GetComponent<Image>().color = objectColor2;
 
-        Player_Hareket.kontrolYontemi = false; 
-        SoundFX_Control.instance.PlayButtonSound();
+        Player_Hareket.kontrolYontemi = false;
+        if (sesCalsinmi) SoundFX_Control.instance.PlayButtonSound();
         Screen.sleepTimeout = SleepTimeout.SystemSetting;
     }
 
     public void ResetButtonPress()
     {
-           optionsContent.SetActive(false);
-           resetMenu.SetActive(true);
-           SoundFX_Control.instance.PlayButtonSound();
+        optionsContent.SetActive(false);
+        //resetMenu.SetActive(true);
+        SoundFX_Control.instance.PlayButtonSound();
     }
 
     public void ResetButtonYes()
@@ -160,7 +162,7 @@ public class OptionsMenu : MonoBehaviour
     public void ResetButtonNo()
     {
         optionsContent.SetActive(true);
-        resetMenu.SetActive(false);
+        //resetMenu.SetActive(false);
         SoundFX_Control.instance.PlayButtonSound();
     }
 

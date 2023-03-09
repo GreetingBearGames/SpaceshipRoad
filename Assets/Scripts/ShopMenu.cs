@@ -14,7 +14,7 @@ public class ShopMenu : MonoBehaviour
     [SerializeField] TextMeshProUGUI shipBuyValue, planetBuyValue;
     [SerializeField] Planet_to_Game planet_To_Game;
     [SerializeField] Ship_to_Game ship_To_Game;
-    [SerializeField] Bg_Kayma[] scrollingBackgrounds = new Bg_Kayma[12];
+    [SerializeField] GameObject optionMenu;
 
     public static bool isGameStarted = false;
     private int shipIndex = 0;
@@ -79,6 +79,7 @@ public class ShopMenu : MonoBehaviour
         shopWindow.SetActive(false);
         GameManager.Instance.IsGameStarted = true;
         ObstacleLineSpawner.instance.SpawnLine();
+        optionMenu.SetActive(false);
     }
 
 

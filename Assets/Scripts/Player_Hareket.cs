@@ -58,8 +58,15 @@ public class Player_Hareket : MonoBehaviour
 
         if (!isFinished && isMovingStarted)
         {
-            TouchInput();
-            MovewithSlide();
+            if (!kontrolYontemi)
+            {
+                TouchInput();
+                MovewithSlide();
+            }
+            else
+            {
+                MoveWithSensor();
+            }
         }
     }
 

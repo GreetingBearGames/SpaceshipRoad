@@ -6,17 +6,19 @@ using UnityEngine.SceneManagement;
 
 public class GameButtons : MonoBehaviour
 {
-    [SerializeField] GameObject pauseWindow, pauseButton, continueButton;
+    [SerializeField] GameObject pauseWindow, pauseButton, continueButton, optionsButton;
 
 
-    public void Restart(){
+    public void Restart()
+    {
         Time.timeScale = 1;
         SoundFX_Control.instance.PlayButtonSound();
         StartCoroutine(SahneYukleme(1));
     }
 
 
-    public void TurntoMainMenu(){
+    public void TurntoMainMenu()
+    {
         Time.timeScale = 1;
         SoundFX_Control.instance.PlayButtonSound();
         SoundFX_Control.instance.YokEt();
@@ -27,7 +29,7 @@ public class GameButtons : MonoBehaviour
     {
         yield return new WaitForSeconds(0.2f);
         SceneManager.LoadScene(sahnenumarasi);
-    }  
+    }
 
 
     public void PauseGame()
@@ -36,8 +38,9 @@ public class GameButtons : MonoBehaviour
         pauseWindow.SetActive(true);
         pauseButton.SetActive(false);
         continueButton.SetActive(true);
+        optionsButton.SetActive(true);
         SoundFX_Control.instance.PlayButtonSound();
-    } 
+    }
 
 
     public void ContinueGame()
@@ -46,6 +49,7 @@ public class GameButtons : MonoBehaviour
         pauseWindow.SetActive(false);
         pauseButton.SetActive(true);
         continueButton.SetActive(false);
+        optionsButton.SetActive(false);
         SoundFX_Control.instance.PlayButtonSound();
     }
 }
