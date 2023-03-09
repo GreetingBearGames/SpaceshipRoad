@@ -32,7 +32,7 @@ public class Obstacle : MonoBehaviour
         {
             if (col.tag == "Player")
             {
-                //SoundFX_Control.instance.PlayImpactSound();
+                SoundFX_Control.instance.PlayImpactSound();
                 GameOver.instance.Crashed();
                 // Set crashed value to true so that this function would not be called again.
                 crashed = true;

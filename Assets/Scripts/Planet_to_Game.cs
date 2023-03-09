@@ -6,7 +6,7 @@ public class Planet_to_Game : MonoBehaviour
 {
     public static GameObject aktiveGezegen;
     [SerializeField] private List<GameObject> obstacles;
-    [SerializeField] AudioClip[] muzikler = new AudioClip[4];
+    [SerializeField] AudioClip[] muzikler = new AudioClip[5];
 
 
     void Awake()
@@ -19,7 +19,7 @@ public class Planet_to_Game : MonoBehaviour
                 aktiveGezegen.SetActive(true);
                 if (PlayerPrefs.GetInt("MusicOption") == 1)
                 {
-                    this.GetComponent<AudioSource>().clip = muzikler[i];
+                    this.GetComponent<AudioSource>().clip = muzikler[4];
                     this.GetComponent<AudioSource>().Play();
                 }
             }
@@ -37,6 +37,12 @@ public class Planet_to_Game : MonoBehaviour
         aktiveGezegen = gameObject.transform.GetChild(planetIndex).gameObject;
         aktiveGezegen.SetActive(true);
         PlayerPrefs.SetInt("isPlanetUsed" + planetIndex, 1);
+
+        if (PlayerPrefs.GetInt("MusicOption") == 1)
+        {
+            this.GetComponent<AudioSource>().clip = muzikler[planetIndex];
+            this.GetComponent<AudioSource>().Play();
+        }
     }
 
     /*
