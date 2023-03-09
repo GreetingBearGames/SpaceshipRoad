@@ -8,58 +8,270 @@ public class ShopMenu : MonoBehaviour
 {
 
     [SerializeField] GameObject menuBackground;
-    [SerializeField] GameObject shopMenu, shipSelectButton, planetSelectButton;
+    [SerializeField] GameObject shopWindow, shipSelectButton, planetSelectButton;
     [SerializeField] GameObject shipSelectSubMenu, planetSelectSubMenu;
+    [SerializeField] Button shipBuyButton, planetBuyButton;
+    [SerializeField] TextMeshProUGUI shipBuyValue, planetBuyValue;
+    [SerializeField] Planet_to_Game planet_To_Game;
+    [SerializeField] Ship_to_Game ship_To_Game;
+    [SerializeField] Bg_Kayma[] scrollingBackgrounds = new Bg_Kayma[12];
+
+    public static bool isGameStarted = false;
     private int shipIndex = 0;
     private int planetIndex = 0;
     private bool isShipSelectMenu;
     private Color shipSelectButtonColor, planetSelectButtonColor;
 
-    private int[] shipPrice = {0, 50, 50, 100, 150, 200};
-    private int[] planetPrice = {0, 100, 150, 200};
+    private int[] shipPrice = { 0, 10, 20, 30, 40, 50 };
+    private int[] planetPrice = { 0, 20, 40, 60 };
 
 
-    public void OpenShopMenu()
+    private void Start()
     {
-        menuBackground.SetActive(true);
-        shopMenu.SetActive(true);
+        shopWindow.SetActive(true);
 
+        ShipsImageControl();
+        PlanetsImageControl();
+        PurchasedShipSelector();
+        PurchasedPlanetSelector();
 
-        OpenSpaceshipSelectSubMenu();
-        SoundFX_Control.instance.PlayButtonSound();
+        Wallet.SetAmount(1000);
     }
 
 
-
-
-    public void CloseShopMenu()
+    public void CloseShopandStartGame()
     {
-        menuBackground.SetActive(false);
-        shopMenu.SetActive(false);
-        SoundFX_Control.instance.PlayButtonSound();
+        //----------------------Aktif gemiyi bulma ve oyuna getirme
+        var shipParent = transform.GetChild(0).transform.GetChild(0);
+        for (int k = 0; k < 6; k++)
+        {
+            if (shipParent.GetChild(k).gameObject.activeSelf == true)       //böylece setactive true olanı buldu
+            {
+                for (int sayac = k; sayac >= 0; sayac--)
+                {
+                    if (PlayerPrefs.GetInt("isShipBought" + sayac) == 1)
+                    {
+                        ship_To_Game.SelectShiptoGame(sayac);
+                        break;
+                    }
+                }
+            }
+        }
+
+
+        //----------------------Aktif planeti bulma ve oyuna getirme
+        var planetParent = transform.GetChild(0).transform.GetChild(1);
+        for (int k = 0; k < 4; k++)
+        {
+            if (planetParent.GetChild(k).gameObject.activeSelf == true)       //böylece setactive true olanı buldu
+            {
+                for (int sayac = k; sayac >= 0; sayac--)
+                {
+                    if (PlayerPrefs.GetInt("isPlanetBought" + sayac) == 1)
+                    {
+                        planet_To_Game.SelectPlanettoGame(sayac);
+                        break;
+                    }
+                }
+            }
+        }
+
+        shopWindow.SetActive(false);
+        GameManager.Instance.IsGameStarted = true;
+        ObstacleLineSpawner.instance.SpawnLine();
     }
 
 
+    private void ShipsImageControl()    //Satın alınan ship imagelar'ını aktive eder
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            if (PlayerPrefs.GetInt("isShipBought" + i) == 1)
+            {
+                //shipBuyButton.gameObject.SetActive(false);
+                GameObject referencedShip = transform.GetChild(0).transform.GetChild(0).GetChild(i).gameObject;
+                referencedShip.GetComponent<Image>().color = new Color(1f, 1f, 1f, 1f);
+            }
+        }
+    }
+    private void PlanetsImageControl()  //Satın alınan planet imagelar'ını aktive eder
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            if (PlayerPrefs.GetInt("isPlanetBought" + i) == 1)
+            {
+                //planetBuyButton.gameObject.SetActive(false);
+                GameObject referencedPlanet = transform.GetChild(0).transform.GetChild(1).GetChild(i).gameObject;
+                referencedPlanet.GetComponent<Image>().color = new Color(1f, 1f, 1f, 1f);
+            }
+        }
+    }
 
+    private void PurchasedShipSelector()    //Shop açıldığında en son satın alınan ship gösterir
+    {
+        for (int j = 5; j >= 0; j--)
+        {
+            if (PlayerPrefs.GetInt("isShipBought" + j) == 1)
+            {
+                GameObject purchasedLastShip = transform.GetChild(0).transform.GetChild(0).GetChild(j).gameObject;
+                purchasedLastShip.SetActive(true);
+                break;
+            }
+        }
+    }
+    private void PurchasedPlanetSelector()    //Shop açıldığında en son satın alınan planet gösterir
+    {
+        for (int j = 3; j >= 0; j--)
+        {
+            if (PlayerPrefs.GetInt("isPlanetBought" + j) == 1)
+            {
+                GameObject purchasedLastPlanet = transform.GetChild(0).transform.GetChild(1).GetChild(j).gameObject;
+                purchasedLastPlanet.SetActive(true);
+                break;
+            }
+        }
+    }
+
+    public void NextandPreviousShipButton(bool isPressedNext)   //İleri geri düğmelerine basışları kontrol eder
+    {
+        var shipsParent = transform.GetChild(0).transform.GetChild(0);
+        for (int j = 5; j >= 0; j--)
+        {
+            if (shipsParent.GetChild(j).gameObject.activeSelf == true)
+            {
+                if (isPressedNext && j <= 4)
+                {
+                    GameObject aktifShip = shipsParent.GetChild(j).gameObject;
+                    GameObject nextShip = shipsParent.GetChild(j + 1).gameObject;
+                    nextShip.SetActive(true);
+                    aktifShip.SetActive(false);
+                    CheckPurchasement(j + 1, true);
+
+                    shipIndex = j + 1;
+                }
+                else if (!isPressedNext && j >= 1)
+                {
+                    GameObject aktifShip = shipsParent.GetChild(j).gameObject;
+                    GameObject previousShip = shipsParent.GetChild(j - 1).gameObject;
+                    previousShip.SetActive(true);
+                    aktifShip.SetActive(false);
+                    CheckPurchasement(j - 1, true);
+
+                    shipIndex = j - 1;
+                }
+                break;
+            }
+        }
+    }
+    public void NextandPreviousPlanetButton(bool isPressedNext)    //İleri geri düğmelerine basışları kontrol eder
+    {
+        var PlanetParent = transform.GetChild(0).transform.GetChild(1);
+        for (int j = 3; j >= 0; j--)
+        {
+            if (PlanetParent.GetChild(j).gameObject.activeSelf == true)
+            {
+                if (isPressedNext && j <= 2)
+                {
+                    GameObject aktifPlanet = PlanetParent.GetChild(j).gameObject;
+                    GameObject nextPlanet = PlanetParent.GetChild(j + 1).gameObject;
+                    nextPlanet.SetActive(true);
+                    aktifPlanet.SetActive(false);
+                    CheckPurchasement(j + 1, false);
+
+                    planetIndex = j + 1;
+                }
+                else if (!isPressedNext && j >= 1)
+                {
+                    GameObject aktifPlanet = PlanetParent.GetChild(j).gameObject;
+                    GameObject previousPlanet = PlanetParent.GetChild(j - 1).gameObject;
+                    previousPlanet.SetActive(true);
+                    aktifPlanet.SetActive(false);
+                    CheckPurchasement(j - 1, false);
+
+                    planetIndex = j - 1;
+                }
+                break;
+            }
+        }
+    }
+
+    private void CheckPurchasement(int index, bool isShip)  //İlgili objenin satın alınıp alınmadığını kontrol eder
+    {
+        if (isShip)
+        {
+            if (PlayerPrefs.GetInt("isShipBought" + index) == 1)
+            {
+                shipBuyButton.gameObject.SetActive(false);
+            }
+            else
+            {
+                shipBuyButton.gameObject.SetActive(true);
+                shipBuyValue.text = shipPrice[index].ToString();
+            }
+        }
+        else
+        {
+            if (PlayerPrefs.GetInt("isPlanetBought" + index) == 1)
+            {
+                planetBuyButton.gameObject.SetActive(false);
+            }
+            else
+            {
+                planetBuyButton.gameObject.SetActive(true);
+                planetBuyValue.text = planetPrice[index].ToString();
+            }
+        }
+    }
+    public void BuyItem(bool isShip)    //İlgili objenin satın alınmasını yapar
+    {
+        if (isShip)
+        {
+            if (Wallet.GetAmount() - shipPrice[shipIndex] >= 0)
+            {
+                PlayerPrefs.SetInt("isShipBought" + shipIndex, 1);
+                Wallet.SetAmount(Wallet.GetAmount() - shipPrice[shipIndex]);
+
+                ShipsImageControl();
+                shipBuyButton.gameObject.SetActive(false);
+            }
+        }
+        else
+        {
+            if (Wallet.GetAmount() - planetPrice[planetIndex] >= 0)
+            {
+                PlayerPrefs.SetInt("isPlanetBought" + planetIndex, 1);
+                Wallet.SetAmount(Wallet.GetAmount() - planetPrice[planetIndex]);
+
+                PlanetsImageControl();
+                planetBuyButton.gameObject.SetActive(false);
+            }
+        }
+
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------------------
+
+
+    /*
     public void OpenSpaceshipSelectSubMenu()
-    {
-        isShipSelectMenu = true;
-        shipSelectSubMenu.SetActive(true);
-        planetSelectSubMenu.SetActive(false);
+        {
+            isShipSelectMenu = true;
+            shipSelectSubMenu.SetActive(true);
+            planetSelectSubMenu.SetActive(false);
 
 
-        shipSelectButtonColor = shipSelectButton.GetComponent<UnityEngine.UI.Image>().color;
-        shipSelectButtonColor.a = 1f;
-        shipSelectButton.GetComponent<UnityEngine.UI.Image>().color = shipSelectButtonColor;
+            shipSelectButtonColor = shipSelectButton.GetComponent<UnityEngine.UI.Image>().color;
+            shipSelectButtonColor.a = 1f;
+            shipSelectButton.GetComponent<UnityEngine.UI.Image>().color = shipSelectButtonColor;
 
-        planetSelectButtonColor = planetSelectButton.GetComponent<UnityEngine.UI.Image>().color;
-        planetSelectButtonColor.a = 0.35f;
-        planetSelectButton.GetComponent<UnityEngine.UI.Image>().color = planetSelectButtonColor;
-        
-        
-        SoundFX_Control.instance.PlayButtonSound();
-        SatinAlmaButonuModu();
-    }
+            planetSelectButtonColor = planetSelectButton.GetComponent<UnityEngine.UI.Image>().color;
+            planetSelectButtonColor.a = 0.35f;
+            planetSelectButton.GetComponent<UnityEngine.UI.Image>().color = planetSelectButtonColor;
+
+
+            SoundFX_Control.instance.PlayButtonSound();
+            SatinAlmaButonuModu();
+        }
 
     public void OpenPlanetSelectSubMenu()
     {
@@ -74,17 +286,16 @@ public class ShopMenu : MonoBehaviour
         planetSelectButtonColor = planetSelectButton.GetComponent<UnityEngine.UI.Image>().color;
         planetSelectButtonColor.a = 1f;
         planetSelectButton.GetComponent<UnityEngine.UI.Image>().color = planetSelectButtonColor;
-        
+
         SoundFX_Control.instance.PlayButtonSound();
         SatinAlmaButonuModu();
     }
 
-
     public void PreviousItem()
     {
-        if(isShipSelectMenu)
+        if (isShipSelectMenu)
         {
-            if(shipIndex >= 1)
+            if (shipIndex >= 1)
             {
                 GameObject existingShip = ((gameObject.transform.GetChild(1).gameObject).transform.GetChild(2).gameObject).transform.GetChild(shipIndex).gameObject;
                 existingShip.SetActive(false);
@@ -97,7 +308,7 @@ public class ShopMenu : MonoBehaviour
 
         else
         {
-            if(planetIndex >= 1)
+            if (planetIndex >= 1)
             {
                 GameObject existingPlanet = ((gameObject.transform.GetChild(1).gameObject).transform.GetChild(3).gameObject).transform.GetChild(planetIndex).gameObject;
                 existingPlanet.SetActive(false);
@@ -114,9 +325,9 @@ public class ShopMenu : MonoBehaviour
 
     public void NextItem()
     {
-        if(isShipSelectMenu)
+        if (isShipSelectMenu)
         {
-            if(shipIndex < 5)
+            if (shipIndex < 5)
             {
                 GameObject existingShip = ((gameObject.transform.GetChild(1).gameObject).transform.GetChild(2).gameObject).transform.GetChild(shipIndex).gameObject;
                 existingShip.SetActive(false);
@@ -129,7 +340,7 @@ public class ShopMenu : MonoBehaviour
 
         else
         {
-            if(planetIndex < 3)
+            if (planetIndex < 3)
             {
                 GameObject existingPlanet = ((gameObject.transform.GetChild(1).gameObject).transform.GetChild(3).gameObject).transform.GetChild(planetIndex).gameObject;
                 existingPlanet.SetActive(false);
@@ -144,38 +355,36 @@ public class ShopMenu : MonoBehaviour
         SatinAlmaButonuModu();
     }
 
-
-
     public void BuyItem()
     {
-        if(isShipSelectMenu)
+        if (isShipSelectMenu)
         {
-            if(Wallet.GetAmount() - shipPrice[shipIndex] >= 0)
+            if (Wallet.GetAmount() - shipPrice[shipIndex] >= 0)
             {
                 PlayerPrefs.SetInt("isShipBought" + shipIndex, 1);
                 Wallet.SetAmount(Wallet.GetAmount() - shipPrice[shipIndex]);
             }
-            else {SoundFX_Control.instance.PlayButtonSound(); return;}
+            else { SoundFX_Control.instance.PlayButtonSound(); return; }
         }
         else
         {
-            if(Wallet.GetAmount() - planetPrice[planetIndex] >= 0)
+            if (Wallet.GetAmount() - planetPrice[planetIndex] >= 0)
             {
                 PlayerPrefs.SetInt("isPlanetBought" + planetIndex, 1);
                 Wallet.SetAmount(Wallet.GetAmount() - planetPrice[planetIndex]);
             }
-            else {SoundFX_Control.instance.PlayButtonSound(); return;}
+            else { SoundFX_Control.instance.PlayButtonSound(); return; }
         }
-        
+
         SoundFX_Control.instance.PlayBuySound();
         SatinAlmaButonuModu();
     }
 
     public void UseBoughtItem()
     {
-        if(isShipSelectMenu)
+        if (isShipSelectMenu)
         {
-            for(int i = 0; i < 6; i++)
+            for (int i = 0; i < 6; i++)
             {
                 PlayerPrefs.SetInt("isShipUsed" + i, 0);
             }
@@ -183,7 +392,7 @@ public class ShopMenu : MonoBehaviour
         }
         else
         {
-            for(int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; i++)
             {
                 PlayerPrefs.SetInt("isPlanetUsed" + i, 0);
             }
@@ -193,7 +402,6 @@ public class ShopMenu : MonoBehaviour
         SoundFX_Control.instance.PlayButtonSound();
         SatinAlmaButonuModu();
     }
-
 
     public void SatinAlmaButonuModu()
     {
@@ -216,16 +424,16 @@ public class ShopMenu : MonoBehaviour
 
 
         //GEMİ EKRANINDA SATIN ALIM İŞLEMİ
-        if(isShipSelectMenu)
+        if (isShipSelectMenu)
         {
-            if(PlayerPrefs.GetInt("isShipBought" + shipIndex) == 1)
+            if (PlayerPrefs.GetInt("isShipBought" + shipIndex) == 1)
             {
                 useButton.SetActive(true);
 
                 GameObject ekrandakiGemi = ((gameObject.transform.GetChild(1).gameObject).transform.GetChild(2).gameObject).transform.GetChild(shipIndex).gameObject;
                 ekrandakiGemi.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
 
-                if(PlayerPrefs.GetInt("isShipUsed" + shipIndex) == 1)
+                if (PlayerPrefs.GetInt("isShipUsed" + shipIndex) == 1)
                 {
                     useButton.SetActive(false);
                     usedButton.SetActive(true);
@@ -238,7 +446,7 @@ public class ShopMenu : MonoBehaviour
             else
             {
                 buyButton.SetActive(true);
-                if(PlayerPrefs.GetInt("isShipBought" + (shipIndex-1)) == 1)
+                if (PlayerPrefs.GetInt("isShipBought" + (shipIndex - 1)) == 1)
                 {
                     buyButton.GetComponent<Button>().interactable = true;
                     buyBeforeUyarisi.SetActive(false);
@@ -260,14 +468,14 @@ public class ShopMenu : MonoBehaviour
         //PLANET EKRANINDA SATIN ALIM İŞLEMİ
         else
         {
-            if(PlayerPrefs.GetInt("isPlanetBought" + planetIndex) == 1)
+            if (PlayerPrefs.GetInt("isPlanetBought" + planetIndex) == 1)
             {
                 useButton.SetActive(true);
 
                 GameObject ekrandakiGezegen = ((gameObject.transform.GetChild(1).gameObject).transform.GetChild(3).gameObject).transform.GetChild(planetIndex).gameObject;
                 ekrandakiGezegen.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
 
-                if(PlayerPrefs.GetInt("isPlanetUsed" + planetIndex) == 1)
+                if (PlayerPrefs.GetInt("isPlanetUsed" + planetIndex) == 1)
                 {
                     useButton.SetActive(false);
                     usedButton.SetActive(true);
@@ -280,7 +488,7 @@ public class ShopMenu : MonoBehaviour
             else
             {
                 buyButton.SetActive(true);
-                if(PlayerPrefs.GetInt("isPlanetBought" + (planetIndex-1)) == 1)
+                if (PlayerPrefs.GetInt("isPlanetBought" + (planetIndex - 1)) == 1)
                 {
                     buyButton.GetComponent<Button>().interactable = true;
                     buyBeforeUyarisi.SetActive(false);
@@ -298,35 +506,5 @@ public class ShopMenu : MonoBehaviour
             }
         }
     }
-
-
-
-
-
-
-    /*
-    void Update() 
-    {
-        if (Input.GetKeyDown (KeyCode.Space)) {
-            StartCoroutine("DegerGosterici");
-        }
-    }
-
-    IEnumerator DegerGosterici()
-    {        
-        for(int i = 0; i < 6; i++)
-        {
-            Debug.Log("Ship: " + i + " = " + PlayerPrefs.GetInt("isShipBought" + i) + " / " + PlayerPrefs.GetInt("isShipUsed" + i));
-        }
-        
-        for(int i = 0; i < 4; i++)
-        {
-            Debug.Log("Planet: " + i + " = " + PlayerPrefs.GetInt("isPlanetBought" + i) + " / " + PlayerPrefs.GetInt("isPlanetUsed" + i));
-        }
-        yield return new WaitForSeconds(5f);
-    }  
     */
-
-
-
 }

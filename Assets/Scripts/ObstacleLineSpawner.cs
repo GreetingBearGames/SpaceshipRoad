@@ -16,7 +16,6 @@ public class ObstacleLineSpawner : MonoBehaviour
     void Start()
     {
         instance = this;
-        SpawnLine();
     }
 
 

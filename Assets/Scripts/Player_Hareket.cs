@@ -14,6 +14,7 @@ public class Player_Hareket : MonoBehaviour
     public static bool kontrolYontemi;    //kontrolYontemi = 1 ise tilt, 0 ise touch
     private bool isFinished = false;
     private float extraMoveforSmooth = 1f;
+    private bool isMovingStarted = false;
 
 
 
@@ -49,7 +50,13 @@ public class Player_Hareket : MonoBehaviour
 
     void Update()
     {
-        if (!isFinished)
+        if (GameManager.Instance.IsGameStarted && !isMovingStarted)
+        {
+            StartMoving();
+        }
+
+
+        if (!isFinished && isMovingStarted)
         {
             TouchInput();
             MovewithSlide();
@@ -65,23 +72,31 @@ public class Player_Hareket : MonoBehaviour
 
     void Start()
     {
-        ekranYukseklik = camerasize.bounds.size.x * Screen.height / Screen.width;
-        startposition = new Vector2(0, (ekranYukseklik * -0.3f));
-        Ship_to_Game.aktiveGemi.transform.position = startposition;
 
-        gemiGenislik = Ship_to_Game.aktiveGemi.GetComponent<SpriteRenderer>().bounds.size.x;
-
-        finalpositionleft = new Vector2(camerasize.bounds.min.x + (gemiGenislik / 2), startposition.y);
-        finalpositionright = new Vector2(camerasize.bounds.max.x - (gemiGenislik / 2), startposition.y);
-
-        finalpositionleft2 = new Vector2(finalpositionleft.x - extraMoveforSmooth, finalpositionleft.y);
-        finalpositionright2 = new Vector2(finalpositionright.x + extraMoveforSmooth, finalpositionleft.y);
-
-
-        rb = Ship_to_Game.aktiveGemi.GetComponent<Rigidbody2D>();
     }
 
+    private void StartMoving()
+    {
+        if (!isMovingStarted)
+        {
+            ekranYukseklik = camerasize.bounds.size.x * Screen.height / Screen.width;
+            startposition = new Vector2(0, (ekranYukseklik * -0.3f));
+            Ship_to_Game.aktiveGemi.transform.position = startposition;
 
+            gemiGenislik = Ship_to_Game.aktiveGemi.GetComponent<SpriteRenderer>().bounds.size.x;
+
+            finalpositionleft = new Vector2(camerasize.bounds.min.x + (gemiGenislik / 2), startposition.y);
+            finalpositionright = new Vector2(camerasize.bounds.max.x - (gemiGenislik / 2), startposition.y);
+
+            finalpositionleft2 = new Vector2(finalpositionleft.x - extraMoveforSmooth, finalpositionleft.y);
+            finalpositionright2 = new Vector2(finalpositionright.x + extraMoveforSmooth, finalpositionleft.y);
+
+            rb = Ship_to_Game.aktiveGemi.GetComponent<Rigidbody2D>();
+
+            isMovingStarted = true;
+        }
+
+    }
     void MoveWithSensor()
     {
         if (Mathf.Abs(Input.acceleration.x) > 0.01f)
