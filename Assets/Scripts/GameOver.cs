@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameOver : MonoBehaviour
 {
-    [SerializeField] GameObject GameOverWindow, patlamaParticle, pauseButtton;
+    [SerializeField] GameObject GameOverWindow, patlamaParticle, pauseButtton, optionsButton;
     public bool crashedWithStone;
     public static GameOver instance;
     private GameObject aktifOlanGemi;
@@ -29,6 +29,7 @@ public class GameOver : MonoBehaviour
             patlamaParticle.SetActive(true);
             GameOverWindow.SetActive(true);
             pauseButtton.SetActive(false);
+            optionsButton.SetActive(true);
 
             (aktifOlanGemi.transform.GetChild(0).gameObject).SetActive(false); //aktif geminin flamelerini gizleme
             StartCoroutine("FadeOut");

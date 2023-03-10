@@ -9,7 +9,7 @@ public class StartGame_mainmenu : MonoBehaviour
     public GameObject LoadingScreen;
     //[SerializeField] Image LoadingBarFill;
     public Slider loadingSlider;
-    
+
     public void StartGame(int sceneId)
     {
         //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
@@ -20,15 +20,24 @@ public class StartGame_mainmenu : MonoBehaviour
     IEnumerator SahneYukleyici(int sceneId)
     {
         AsyncOperation operation = SceneManager.LoadSceneAsync(sceneId);
-        
+
         LoadingScreen.SetActive(true);
 
-        while(!operation.isDone)
+        while (!operation.isDone)
         {
-            float progressValue = Mathf.Clamp01(operation.progress/0.9f);
+            float progressValue = Mathf.Clamp01(operation.progress / 0.9f);
             loadingSlider.value = progressValue;
+            Debug.Log(progressValue);
             //LoadingBarFill.fillAmount = progressValue;
             yield return null;
         }
-    }  
+
+
+        /*
+        AsyncOperation operation = SceneManager.LoadSceneAsync(newSceneId);
+        operation.allowSceneActivation = false;
+        yield return new WaitForSeconds(2.3f);
+        operation.allowSceneActivation = true;
+        */
+    }
 }
