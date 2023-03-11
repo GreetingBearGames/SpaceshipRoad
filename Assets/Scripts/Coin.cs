@@ -32,11 +32,16 @@ public class Coin : MonoBehaviour
 
     IEnumerator DestroyCoin()
     {
+        var particle = transform.GetChild(0).gameObject;
+        particle.GetComponent<ParticleSystem>().Play();
+
         Color objectColor = this.GetComponent<SpriteRenderer>().color;
         objectColor.a = 0f;
         this.GetComponent<SpriteRenderer>().color = objectColor;
 
         yield return new WaitForSeconds(0.5f);
-        Destroy(gameObject);
-    }  
+        if (!particle.activeSelf) Destroy(gameObject);
+        yield return new WaitForSeconds(0.5f);
+        if (!particle.activeSelf) Destroy(gameObject);
+    }
 }

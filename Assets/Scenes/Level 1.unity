@@ -28104,7 +28104,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 784f143d6b5bc46b9bd53ce2c89be5bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  finishLineCreationSec: 1
+  finishLineCreationSec: 10
   player_Hareket: {fileID: 676575683}
   levelFinishMenu: {fileID: 1039769008}
 --- !u!61 &1554946902
