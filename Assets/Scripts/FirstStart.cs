@@ -41,6 +41,16 @@ public class FirstStart : MonoBehaviour
             PlayerPrefs.SetInt("isPlanetBought" + 0, 1);
             PlayerPrefs.SetInt("isPlanetUsed" + 0, 1);
 
+            //DENEMELİK-------------------SONRADAN BU KISIM SİLENECEK
+            PlayerPrefs.SetInt("WalletAmount", 500);
+            PlayerPrefs.SetInt("isPlanetBought" + 1, 1);
+            PlayerPrefs.SetInt("isPlanetUsed" + 1, 1);
+            PlayerPrefs.SetInt("isPlanetUsed" + 0, 0);
+            PlayerPrefs.SetInt("isShipBought" + 2, 1);
+            PlayerPrefs.SetInt("isShipUsed" + 2, 1);
+            PlayerPrefs.SetInt("isShipUsed" + 0, 0);
+            //-------------------
+
             PlayerPrefs.SetString("OyunDahaOnceAcildimi", "EVET");
         }
     }

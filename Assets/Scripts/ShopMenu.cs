@@ -36,8 +36,6 @@ public class ShopMenu : MonoBehaviour
         PlanetsImageControl();
         PurchasedShipSelector();
         PurchasedPlanetSelector();
-
-        Wallet.SetAmount(1000);
     }
 
 

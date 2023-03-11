@@ -38,7 +38,6 @@ public class FinishLine : MonoBehaviour
         {
             if (other.tag == "Player")
             {
-                Debug.Log("oyun bitti");
                 SoundFX_Control.instance.PlayWinSound();
                 isFinished = true;
                 player_Hareket.FinishLinePlayerControl();

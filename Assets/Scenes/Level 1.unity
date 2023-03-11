@@ -21891,7 +21891,7 @@ MonoBehaviour:
   maxObstacles: 2
   newspawn_deltaheight: 12
   randomizeObstaclesOffest: 9
-  coinSpawnRate: 0.4
+  coinSpawnRate: 0.459
   ObstacleSpeedStart: 5
 --- !u!1001 &1365151314
 PrefabInstance:
@@ -28241,7 +28241,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 784f143d6b5bc46b9bd53ce2c89be5bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  finishLineCreationSec: 3
+  finishLineCreationSec: 22
   player_Hareket: {fileID: 676575683}
   levelFinishMenu: {fileID: 1039769008}
 --- !u!61 &1554946902
@@ -45742,7 +45742,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.032
+  m_Volume: 0.704
   m_Pitch: 1
   Loop: 1
   Mute: 0
