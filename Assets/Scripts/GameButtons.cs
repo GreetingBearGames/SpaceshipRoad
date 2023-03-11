@@ -22,6 +22,13 @@ public class GameButtons : MonoBehaviour
         StartCoroutine(SahneYukleme(SceneManager.GetActiveScene().buildIndex));
     }
 
+    public void NextLevel()
+    {
+        SoundFX_Control.instance.PlayButtonSound();
+        LoadingScreen.SetActive(true);
+        StartCoroutine(SahneYukleme(SceneManager.GetActiveScene().buildIndex + 1));
+    }
+
 
     public void TurntoMainMenu()
     {

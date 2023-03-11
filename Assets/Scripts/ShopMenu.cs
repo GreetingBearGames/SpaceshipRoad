@@ -15,6 +15,7 @@ public class ShopMenu : MonoBehaviour
     [SerializeField] Planet_to_Game planet_To_Game;
     [SerializeField] Ship_to_Game ship_To_Game;
     [SerializeField] GameObject optionMenu;
+    [SerializeField] FinishLine finishLine;
 
     public static bool isGameStarted = false;
     private int shipIndex = 0;
@@ -80,6 +81,7 @@ public class ShopMenu : MonoBehaviour
         GameManager.Instance.IsGameStarted = true;
         ObstacleLineSpawner.instance.SpawnLine();
         optionMenu.SetActive(false);
+        finishLine.FinishLineSpawnCounter();
     }
 
 

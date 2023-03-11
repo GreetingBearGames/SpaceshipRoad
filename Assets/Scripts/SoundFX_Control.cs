@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SoundFX_Control : MonoBehaviour
 {
-    [SerializeField] AudioClip buton, buy, altin, impact;
+    [SerializeField] AudioClip buton, buy, altin, impact, win;
     public static SoundFX_Control instance;
     public bool isSoundOn;
     void Awake()
@@ -52,6 +52,15 @@ public class SoundFX_Control : MonoBehaviour
         if (isSoundOn)
         {
             GetComponent<AudioSource>().clip = impact;
+            GetComponent<AudioSource>().Play();
+        }
+    }
+
+    public void PlayWinSound()
+    {
+        if (isSoundOn)
+        {
+            GetComponent<AudioSource>().clip = win;
             GetComponent<AudioSource>().Play();
         }
     }

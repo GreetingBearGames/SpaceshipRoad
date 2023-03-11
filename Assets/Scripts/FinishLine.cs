@@ -2,20 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
 public class FinishLine : MonoBehaviour
 {
     [SerializeField] private float finishLineCreationSec;
     [SerializeField] private Player_Hareket player_Hareket;
     private bool isFinished = false;
-    void Start()
+    [SerializeField] GameObject levelFinishMenu;
+
+
+
+    public void FinishLineSpawnCounter()
     {
         Invoke("FinishLineCreator", finishLineCreationSec);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     private void FinishLineCreator()
@@ -34,13 +34,19 @@ public class FinishLine : MonoBehaviour
             if (other.tag == "Player")
             {
                 Debug.Log("oyun bitti");
-                //SoundFX_Control.instance.PlayImpactSound();
-                //GameOver.instance.Crashed();
+                SoundFX_Control.instance.PlayWinSound();
                 isFinished = true;
-                //tasPatlamaParticle.SetActive(true);
-                //StartCoroutine("FadeOut");
                 player_Hareket.FinishLinePlayerControl();
+                Ship_to_Game.aktiveGemi.GetComponent<PolygonCollider2D>().enabled = false;
+
+                StartCoroutine("WaitLittle");
             }
         }
+    }
+
+    IEnumerator WaitLittle()
+    {
+        yield return new WaitForSeconds(1.5f);
+        levelFinishMenu.SetActive(true);
     }
 }
