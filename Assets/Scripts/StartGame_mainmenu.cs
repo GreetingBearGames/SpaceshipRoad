@@ -27,7 +27,6 @@ public class StartGame_mainmenu : MonoBehaviour
         {
             float progressValue = Mathf.Clamp01(operation.progress / 0.9f);
             loadingSlider.value = progressValue;
-            Debug.Log(progressValue);
             //LoadingBarFill.fillAmount = progressValue;
             yield return null;
         }

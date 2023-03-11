@@ -8,6 +8,7 @@ public class GameOver : MonoBehaviour
     public bool crashedWithStone;
     public static GameOver instance;
     private GameObject aktifOlanGemi;
+    [SerializeField] GameObject finishLine;
 
 
     void Start()
@@ -30,6 +31,7 @@ public class GameOver : MonoBehaviour
             GameOverWindow.SetActive(true);
             pauseButtton.SetActive(false);
             optionsButton.SetActive(true);
+            finishLine.SetActive(false);
 
             (aktifOlanGemi.transform.GetChild(0).gameObject).SetActive(false); //aktif geminin flamelerini gizleme
             StartCoroutine("FadeOut");

@@ -26,6 +26,7 @@ public class GameButtons : MonoBehaviour
     {
         SoundFX_Control.instance.PlayButtonSound();
         LoadingScreen.SetActive(true);
+        //PlayerPrefs.SetInt("SavedLevel", PlayerPrefs.GetInt("SavedLevel") + 1);       //eğer level kayıt sistemi yapacaksan aç
         StartCoroutine(SahneYukleme(SceneManager.GetActiveScene().buildIndex + 1));
     }
 

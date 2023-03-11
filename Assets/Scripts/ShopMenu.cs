@@ -16,6 +16,7 @@ public class ShopMenu : MonoBehaviour
     [SerializeField] Ship_to_Game ship_To_Game;
     [SerializeField] GameObject optionMenu;
     [SerializeField] FinishLine finishLine;
+    [SerializeField] LevelProgress levelProgress;
 
     public static bool isGameStarted = false;
     private int shipIndex = 0;
@@ -82,6 +83,7 @@ public class ShopMenu : MonoBehaviour
         ObstacleLineSpawner.instance.SpawnLine();
         optionMenu.SetActive(false);
         finishLine.FinishLineSpawnCounter();
+        levelProgress.StartProgressBar();
     }
 
 

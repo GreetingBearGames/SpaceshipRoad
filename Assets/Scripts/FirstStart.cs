@@ -4,24 +4,24 @@ using UnityEngine;
 
 public class FirstStart : MonoBehaviour
 {
-    void Awake() 
+    void Awake()
     {
         //DEFAULT SETTINGS --- RUNS ONLY ONCE
 
-        if(PlayerPrefs.GetString("OyunDahaOnceAcildimi") != "EVET")
-        {            
+        if (PlayerPrefs.GetString("OyunDahaOnceAcildimi") != "EVET")
+        {
             //TÜM KAYITLARI SİL---------------------
 
             PlayerPrefs.DeleteKey("OyunDahaOnceAcildimi");
             PlayerPrefs.DeleteKey("SoundOption");
             PlayerPrefs.DeleteKey("MusicOption");
-            PlayerPrefs.DeleteKey("ControlTypeOption"); 
-            for(int i = 0; i < 4; i++)
+            PlayerPrefs.DeleteKey("ControlTypeOption");
+            for (int i = 0; i < 4; i++)
             {
                 PlayerPrefs.DeleteKey("isPlanetUsed" + i);
                 PlayerPrefs.DeleteKey("isPlanetBought" + i);
             }
-            for(int j = 0; j < 6; j++)
+            for (int j = 0; j < 6; j++)
             {
                 PlayerPrefs.DeleteKey("isShipUsed" + j);
                 PlayerPrefs.DeleteKey("isShipBought" + j);
@@ -30,7 +30,8 @@ public class FirstStart : MonoBehaviour
             PlayerPrefs.DeleteKey("WalletAmount");
 
             //YENİ ATAMALAR---------------------
-
+            ;
+            PlayerPrefs.SetInt("SavedLevel", 1);
             PlayerPrefs.SetInt("SoundOption", 1);
             PlayerPrefs.SetInt("MusicOption", 1);
             PlayerPrefs.SetInt("ControlTypeOption", 0);     //touch mode
@@ -39,7 +40,7 @@ public class FirstStart : MonoBehaviour
             PlayerPrefs.SetInt("isShipUsed" + 0, 1);
             PlayerPrefs.SetInt("isPlanetBought" + 0, 1);
             PlayerPrefs.SetInt("isPlanetUsed" + 0, 1);
-            
+
             PlayerPrefs.SetString("OyunDahaOnceAcildimi", "EVET");
         }
     }

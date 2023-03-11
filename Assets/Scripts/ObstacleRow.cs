@@ -5,7 +5,6 @@ using UnityEngine;
 public class ObstacleRow : MonoBehaviour
 {
     public static float speed;
-    public static bool isSpawning = true;
     [HideInInspector] public float ilkHiz = 0f;
     private bool newLineSpawned;
     private List<GameObject> obstacles;
@@ -57,7 +56,7 @@ public class ObstacleRow : MonoBehaviour
                 // How much line has to travel to spawn the new line.
                 if (!newLineSpawned && Mathf.Abs(transform.position.y - startPos.y) > ObstacleLineSpawner.instance.newspawn_deltaheight)
                 {
-                    if (isSpawning)
+                    if (!FinishLine.finishLineCreated)
                     {
                         // Spawn new line.
                         ObstacleLineSpawner.instance.SpawnLine();
