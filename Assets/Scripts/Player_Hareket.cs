@@ -110,6 +110,9 @@ public class Player_Hareket : MonoBehaviour
         {
             moveAmount = Input.acceleration.x * moveSpeedTilt * Time.fixedDeltaTime;
             rb.velocity = new Vector2(moveAmount, 0f);
+
+            targetPos = Mathf.Clamp(transform.position.x, finalpositionleft.x, finalpositionright.x);
+            transform.position = new Vector3(targetPos, transform.position.y, transform.position.z);
         }
     }
 
