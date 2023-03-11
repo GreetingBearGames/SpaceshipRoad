@@ -136,6 +136,7 @@ public class ShopMenu : MonoBehaviour
     public void NextandPreviousShipButton(bool isPressedNext)   //İleri geri düğmelerine basışları kontrol eder
     {
         var shipsParent = transform.GetChild(0).transform.GetChild(0);
+        SoundFX_Control.instance.PlayButtonSound();
         for (int j = 5; j >= 0; j--)
         {
             if (shipsParent.GetChild(j).gameObject.activeSelf == true)
@@ -167,6 +168,7 @@ public class ShopMenu : MonoBehaviour
     public void NextandPreviousPlanetButton(bool isPressedNext)    //İleri geri düğmelerine basışları kontrol eder
     {
         var PlanetParent = transform.GetChild(0).transform.GetChild(1);
+        SoundFX_Control.instance.PlayButtonSound();
         for (int j = 3; j >= 0; j--)
         {
             if (PlanetParent.GetChild(j).gameObject.activeSelf == true)
@@ -247,7 +249,7 @@ public class ShopMenu : MonoBehaviour
                 planetBuyButton.gameObject.SetActive(false);
             }
         }
-
+        SoundFX_Control.instance.PlayButtonSound();
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------
